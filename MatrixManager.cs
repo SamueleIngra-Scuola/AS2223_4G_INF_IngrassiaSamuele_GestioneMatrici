@@ -1,56 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Transactions;
 
 namespace AS2223_4G_INF_IngrassiaSamuele_GestioneMatrici
 {
-    public class MatrixManager
+    /// <summary>
+    /// Gestore di una matrice quadrata
+    /// </summary>
+    public class GestoreMatrice
     {
+        // definizione e istanziazione matrice in base alle dimensioni indicate dall'utente
         int[,] mat;
+
+        // dimensione della matrice
         int matSize;
 
         /// <summary>
-        /// Builder with matSize
+        /// Istanzia una matrice quadra di dimensione lato
         /// </summary>
-        /// <param name="matSize"></param>
-        public MatrixManager(int matSize)
+        /// <param name="lato"></param>
+        public GestoreMatrice(int lato)
         {
-            this.matSize = matSize;
-            mat = new int[matSize, matSize];
+            this.matSize = lato;
+            mat = new int[lato, lato];
         }
 
         /// <summary>
-        /// Builder with entire matrix
+        /// Istanzia e carica la matrice con la matrice passata come parametro
         /// </summary>
         /// <param name="mat"></param>
-        public MatrixManager(int[,] mat)
+        public GestoreMatrice(int[,] mat)
         {
             this.mat = mat;
         }
 
         /// <summary>
-        /// Loads values in the matrix
+        /// Carica la matrice con valori casuali fra minValue e MaxValue
         /// </summary>
         /// <param name="minValue"></param>
         /// <param name="maxValue"></param>
-        public void FillMatrix(int minValue, int maxValue)
+        public void CaricaMatrice(int minValue, int maxValue)
         {
             Random random = new System.Random();
             for (int i = 0; i < matSize; i++)
-                for(int j = 0; j < matSize; j++)
+                for (int j = 0; j < matSize; j++)
                 {
                     mat[i, j] = random.Next(minValue, maxValue);
                 }
         }
 
         /// <summary>
-        /// Prints the matrix
+        /// Stampa la matrice nella console opportunamente formattata
         /// </summary>
-        public void PrintMatrix()
+        public void StampaMatrice()
         {
             for (int i = 0; i < matSize; i++)
             {
@@ -60,15 +64,17 @@ namespace AS2223_4G_INF_IngrassiaSamuele_GestioneMatrici
                 }
                 Console.Write("\n");
             }
+
+            Console.Write("\n");
         }
 
         /// <summary>
-        /// Prints the matrix's frame
+        /// Stampa la cornice della matrice da [0,0] per righe distinte in senso antiorario
         /// </summary>
-        public void PrintMatrixFrame()
+        public void StampaCornice()
         {
             int i;
-            
+
             for (i = 0; i < matSize; i++) //Left Column
                 Console.Write($"{mat[i, 0]}\t");
             Console.Write("\n");
@@ -81,12 +87,14 @@ namespace AS2223_4G_INF_IngrassiaSamuele_GestioneMatrici
             for (i = matSize - 2; i > 0; i--) //Top Row
                 Console.Write($"{mat[0, i]} \t");
             Console.Write("\n");
+            Console.Write("\n");
         }
-        
+
         /// <summary>
-        /// Inverts the first and last columns
+        /// Inverte i valori della prima colonna della matrice con l'ultima
         /// </summary>
-        public void InvertFirstLastColumn()
+        /// <returns></returns>
+        public void InvertiPrimaUltimaColonna()
         {
             for (int i = 0; i < matSize; i++)
             {
@@ -95,66 +103,66 @@ namespace AS2223_4G_INF_IngrassiaSamuele_GestioneMatrici
                 mat[i, matSize - 1] = temp;
             }
         }
-        
+
         /// <summary>
-        /// Searches for a number inside the matrix and counts how many times it is found
+        /// Cerca il valore passato nella matrice e restituisce il numero di occorrenze
         /// </summary>
-        /// <param name="searchedNumber"></param>
+        /// <param name="valoreDaCercare"></param>
         /// <returns></returns>
-        public int NumberCounter(int searchedNumber)
+        public int ContaValore(int valoreDaCercare)
         {
-            int nCounter = 0;
+            int nValori = 0;
 
             for (int i = 0; i < matSize; i++)
                 for (int j = 0; j < matSize; j++)
                 {
-                    if (searchedNumber == mat[i, j])
-                        nCounter++;
+                    if (valoreDaCercare == mat[i, j])
+                        nValori++;
                 }
 
-            return nCounter;
+            return nValori;
         }
 
         /// <summary>
-        /// Calculates the minimum, the maximum and the average values in the matrix
+        /// Calcola il valore minimo, massimo e medio (ritornato) dei valori inseriti nella matrice
         /// </summary>
         /// <param name="min"></param>
         /// <param name="max"></param>
-        /// <returns></returns>
-        public double CalcMinMaxAverage(ref int min, ref int max)
+        public double CalcolaMinMaxMedio(ref int min, ref int max)
         {
-            double average = 0;
+            double medio = 0;
             double sum = 0;
             int nValues = matSize * matSize;
-            
+
             min = mat[0, 0];
             max = mat[0, 0];
-            
+
             for (int i = 0; i < matSize; i++)
                 for (int j = 0; j < matSize; j++)
                 {
-                    if (mat[i, j] < min) 
+                    if (mat[i, j] < min)
                         min = mat[i, j];
-                    if (mat[i, j] > max) 
+                    if (mat[i, j] > max)
                         max = mat[i, j];
-                    
+
                     sum += mat[i, j];
                 }
 
-            average = sum / nValues;
+            medio = sum / nValues;
 
-            return average;
+            return medio;
         }
 
         /// <summary>
-        /// Returns the value of a cell of the matrix
+        /// Ritorna il valore della matrice in una cella
         /// </summary>
-        /// <param name="row"></param>
-        /// <param name="column"></param>
+        /// <param name="riga"></param>
+        /// <param name="colonna"></param>
         /// <returns></returns>
-        public double GetValue(int row, int column)
+        public int GetValue(int riga, int colonna)
         {
-            return mat[row, column];
+            return mat[riga, colonna];
         }
+
     }
 }
